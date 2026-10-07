@@ -39,6 +39,8 @@ ap.add_argument("--log", default=None, help="write a JSON log of the run here")
 ap.add_argument("--workdir", default=None, help="folder for LIVE_CTX.txt (default: a new temp folder)")
 ap.add_argument("--no-edit-batches", type=int, default=0,
                 help="testing: withhold the edit tool for the first N batches, to force the over-budget path")
+ap.add_argument("--show-warnings", action="store_true",
+                help="print the budget warnings the model would get at 25/50/75/90%% of --budget, then exit (no model calls)")
 args = ap.parse_args()
 
 ENC = tiktoken.get_encoding("o200k_base")
@@ -381,4 +383,12 @@ async def main():
     if not args.workdir: shutil.rmtree(WORK, ignore_errors=True)
 
 if __name__ == "__main__":
+    if args.show_warnings:
+        for pct in (10, 25, 50, 75, 90):
+            n = args.budget * pct // 100
+            print(f"{pct:>3}% (~{n} tokens): {warning_for(n) or '(no warning)'}")
+        print(f"  after an edit drops the context back under 50%, the 50% and 75% warnings re-arm: "
+              f"{warning_for(args.budget * 40 // 100) or '(no warning)'} -> {warning_for(args.budget * 60 // 100)}")
+        sys.exit(0)
+    if args.log: os.makedirs(os.path.dirname(args.log) or ".", exist_ok=True)
     asyncio.run(main())
