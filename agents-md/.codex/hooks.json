@@ -1,0 +1,2 @@
+{ "hooks": { "UserPromptSubmit": [
+  { "hooks": [ { "type": "command", "command": "python3 .codex/remind.py" } ] } ] } }

@@ -1,0 +1,17 @@
+[project]
+name = "claude-self-editing-context"
+version = "0.1.0"
+description = "Let Claude edit its own context: a small Claude Agent SDK harness comparing drop-oldest, summaries and self-editing on one log-triage task."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "claude-agent-sdk>=0.2.164",
+    "tiktoken>=0.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/schoolofai/claude-self-editing-context"
+
+[tool.setuptools]
+py-modules = ["ctx_loop_claude", "logtask", "score"]
