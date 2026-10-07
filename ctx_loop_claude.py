@@ -91,7 +91,7 @@ def show_code(code):
 
 # ---------------------------------------------------------------- task + prompts
 task = make_task(args.seed, args.batches)
-WORK = args.workdir or tempfile.mkdtemp(prefix=f"ctx-{args.mode}-s{args.seed}-")
+WORK = os.path.abspath(args.workdir) if args.workdir else tempfile.mkdtemp(prefix=f"ctx-{args.mode}-s{args.seed}-")
 os.makedirs(WORK, exist_ok=True)
 CTX = os.path.join(WORK, "LIVE_CTX.txt")
 
